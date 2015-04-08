@@ -265,7 +265,7 @@ String.prototype.endsWith = function(suffix) {
 };
 
 
-Client.prototype.monitorStream = function(stream, block, callback) {
+Client.prototype.monitorStream = function(stream, notificationBlock) {
   var options = {
     url: stream.endpoint,
     headers: {
@@ -282,16 +282,14 @@ Client.prototype.monitorStream = function(stream, block, callback) {
     chunk += data.toString('utf8');
 
     if (chunk.endsWith('\r\n')) {
-      if (chunk === '\r\n') {
-        console.log('KEEP ALIVE');
-      } else {
-        // console.log('CHUNK: ' + chunk)
+      if (chunk != '\r\n') {
         var json = null;
         try { json = JSON.parse(chunk); } catch(error) { console.log(error); }
 
         if (json)
-          block(json);
+          notificationBlock(json);
       }
+      
       chunk = '';
     }
   });
