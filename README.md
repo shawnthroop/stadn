@@ -64,4 +64,4 @@ client.monitorStream(stream, function(meta, data) {
 });
 ```
 
-*Note: meta and data are json objects corresponding to parts of the stream objects outlined here: https://developers.app.net/reference/resources/app-stream/#sample-stream-objects*
+*Note: `meta` and `data` are json objects corresponding to parts of the stream objects outlined here: https://developers.app.net/reference/resources/app-stream/#sample-stream-objects*
