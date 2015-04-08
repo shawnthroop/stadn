@@ -1,0 +1,28 @@
+{
+  "name": "STADN",
+  "version": "1.0.0",
+  "description": "A node.js script that can fetch and monitor a filtered App.net App Stream",
+  "main": "STADN.js",
+  "dependencies": {
+    "request": "^2.55.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shawnthroop/STADN.git"
+  },
+  "keywords": [
+    "App.net",
+    "App Stream",
+    "Push Notification"
+  ],
+  "author": "Shawn Throop <shawnthroop@gmail.com> (http://shawnthroop.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shawnthroop/STADN/issues"
+  },
+  "homepage": "https://github.com/shawnthroop/STADN"
+}
