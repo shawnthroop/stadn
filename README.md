@@ -55,7 +55,6 @@ Once you have a stream and an authorized client, you can monitor for notificatio
 var client = // Authorized client
 var stream = // Stream object returned in the callback from fetchStream. Not a JSONStream.
 
-// meta and data are json objects corresponding to parts of the stream objects outlined here: https://developers.app.net/reference/resources/app-stream/#sample-stream-objects
 client.monitorStream(stream, function(meta, data) {
     // handle chunk of stream data, for example:
     if (meta.type === 'post') {
@@ -64,3 +63,5 @@ client.monitorStream(stream, function(meta, data) {
     }
 });
 ```
+
+*Note: meta and data are json objects corresponding to parts of the stream objects outlined here: https://developers.app.net/reference/resources/app-stream/#sample-stream-objects*
