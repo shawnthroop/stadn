@@ -1,4 +1,5 @@
 // An client object that gives access to App.net's API
+
 var request = require('request'),
     querystring = require('querystring'),
     https = require('https');
@@ -9,7 +10,7 @@ function Client(clientId, clientSecret, appToken) {
   this.clientId = clientId == null ? config.clientId : clientId;
   this.clientSecret = clientSecret == null ? config.clientSecret : clientSecret;
   this.appToken = appToken != null ? appToken : config.appToken;
-  this.token = null;//userToken != null ? userToken : config.userToken;
+  this.token = null;
 
   // Host URLs for accessing App.net
   this.authHost = 'https://account.app.net';
@@ -157,7 +158,6 @@ Client.prototype.fetchFilter = function(JSONFilter, callback) {
 
     for (var i = 0; i < filters.length; i++){
       var element = filters[i];
-      // console.log('filter.name: ' + element.name);
       if (element.name === JSONFilter.name) {
         fetchedFilter = element;
         break;
@@ -264,30 +264,6 @@ String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
-// Client.prototype.monitorStream = function(stream, block, callback) {
-//   var cache = '';
-//   var req = authedAPIRequest('GET', stream.endpoint, this.token, null, function(err, body) {
-//
-//   });
-//   req.on('data', function(data) {
-//     cache += data;
-//
-//     if (cache.endsWith('\r\n')) {
-//       var frame = cache;
-//       cache = '';
-//
-//       block(JSON.parse(frame));
-//     }
-//   });
-//
-//   req.on('error', function(err) {
-//     callback(err);
-//   });
-//
-//   req.on('end', function(){
-//     console.log('end \n');
-//   })
-// }
 
 Client.prototype.monitorStream = function(stream, block, callback) {
   var options = {
@@ -319,27 +295,6 @@ Client.prototype.monitorStream = function(stream, block, callback) {
       chunk = '';
     }
   });
-
-
-  // var req = authedAPIRequest('GET', stream.endpoint, this.token, null, funct);
-  // req.on('data', function(data) {
-  //   cache += data;
-  //
-  //   if (cache.endsWith('\r\n')) {
-  //     var frame = cache;
-  //     cache = '';
-  //
-  //     block(JSON.parse(frame));
-  //   }
-  // });
-  //
-  // req.on('error', function(err) {
-  //   callback(err);
-  // });
-  //
-  // req.on('end', function(){
-  //   console.log('end \n');
-  // })
 }
 
 
@@ -356,68 +311,4 @@ Client.prototype.createJSONStream = function(object_types, filterId, key) {
 }
 
 
-
-
 module.exports = Client;
-
-
-// var client = new Client();
-//
-// // console.log('token: ' + client.token);
-// // console.log('appToken: ' + client.appToken);
-//
-//
-// var filter = config.defaultFilter();
-//
-// // Authenticate
-// client.authenticate( function(err, json) {
-//   if (err)
-//     return console.error('Error authenticating. ' + err);
-//
-//   if (!client.isAuthenticated()) { return console.error('Could not authenticate'); }
-//
-//   // Fetch the filter (filterID is 2331)
-//   client.fetchFilterWithId('2331', function(err, json) {
-//     if (err)
-//       return console.error('Error fetching filter with id: 2331 ' + err);
-//
-//     var filterData = json.data;
-//     console.log('FILTER_NAME: ' + filterData.name);
-//
-//     if (filterData) {
-//       var filterId = filterData.id;
-//       if (!filterId) { return console.error('Could not fetch filter.'); }
-//
-//       // We have a filterId, fetch the stream
-//       var jsonStream = config.createJSONStream(['post','star','user_follow'], filterId, 'prose_node_notification_stream');
-//       console.log('stream: ' + jsonStream);
-//
-//       client.fetchStreamWithKey(jsonStream.key, function(err, stream) {
-//         if (err) { return console.error(err); }
-//
-//         if (stream.endpoint) {
-//
-//           client.monitorStream(stream, function(err, body) {
-//             if (err) { return console.error(err); }
-//
-//             console.log('body: ' + body + '\n\n');
-//           });
-//           // console.log('endpoint: ' + stream.endpoint);
-//           // request.get(stream.endpoint, function(err, res, body) {
-//           //   console.log('body: ' + body + '\n\n');
-//           // });
-//         } else {
-//           console.error('no stream.endpoint');
-//         }
-//         // var endpoint = stream.endpoint;
-//
-//       });
-//       // client.createStream(stream, function(err, json) {
-//       //   if (err)
-//       //     return console.error('Could not fetch streams. ' + err);
-//       //
-//       //   console.log(json);
-//       // });
-//     }
-//   });
-// });
