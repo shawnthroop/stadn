@@ -4,7 +4,7 @@ A client side script for monitoring an App.net App Stream, written in node.
 
 ## Initialize
 
-Creating a new client is easy if you enter your `client_id`, `client_secret` and `app_token` into the `.config` file. Otherwise, pass them in as arguments when creating a new instance. Keep in mind the 'app_token' is generated from your app's developer page and is not a user token.
+Creating a new client is easy if you enter your `client_id`, `client_secret` and `app_token` into the `.config` file. Otherwise, pass them in as arguments when creating a new instance. Keep in mind the `app_token` is generated from your app's developer page and is not a user token.
 
 ``` javascript
 var PADN = require('./PADN');
