@@ -38,7 +38,7 @@ client.fetchFilter(JSONFilter, function(err, filter) {
     return console.error(err);
 
   var JSONStream = client.createJSONStream(['post','star','user_follow'], filter.id, JSONStreamKey);
-  client.createStream(JSONStream, function(err, stream) {
+  client.fetchStream(JSONStream, function(err, stream) {
     if (err)
       return console.error(err);
 
