@@ -7,7 +7,7 @@ var request = require('request'),
 var PADN = PADN || {};
 
 function Client(configPath) {
-  config = require('.' + configPath);
+  config = require('./' + configPath);
 
   this.clientId = config.clientId;
   this.clientSecret = config.clientSecret;

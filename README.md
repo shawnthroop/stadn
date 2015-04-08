@@ -4,11 +4,11 @@ A client side script for monitoring an App.net App Stream, written in node.
 
 ## Initialize
 
-Creating a new client is easy if you enter your `client_id`, `client_secret` and `app_token` into the `.config` file. Otherwise, pass them in as arguments when creating a new instance. Keep in mind the `app_token` is generated from your app's developer page and is not a user token.
+Create a new config file following the example in `example-config.js` and enter you `client_id`, `client_secret` and `app_token`. Then when creating a client specify the path of the config file. Keep in mind the `app_token` is generated from your app's developer page and is not a user token.
 
 ``` javascript
 var PADN = require('./PADN');
-var client = new PADN('client_id', 'client_secret', 'app_token');
+var client = PADN.Client.create('config');
 ```
 
 ## Authorize
@@ -16,7 +16,7 @@ var client = new PADN('client_id', 'client_secret', 'app_token');
 Create a new client and authorize it.
 
 ``` javascript
-var client = new PADN();
+var client = PADN.Client.create('config');
 client.authorize(function(err) {
   if (err)
     return console.error(err);
@@ -55,8 +55,12 @@ Once you have a stream and an authorized client, you can monitor for notificatio
 var client = // Authorized client
 var stream = // Stream object returned in the callback from fetchStream. Not a JSONStream.
 
-// the returned object is a json object conforming to examples: https://developers.app.net/reference/resources/app-stream/#sample-stream-objects
+// meta and data are json objects corresponding to parts of the stream objects outlined here: https://developers.app.net/reference/resources/app-stream/#sample-stream-objects
 client.monitorStream(stream, function(meta, data) {
-    // handle chunk of stream data
+    // handle chunk of stream data, for example:
+    if (meta.type === 'post') {
+      var post = PADN.Post.createWithData(data);
+      console.log(post);
+    }
 });
 ```
