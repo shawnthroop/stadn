@@ -4,20 +4,24 @@ A client side script for monitoring an App.net App Stream, written in node.
   
 Creating a new client is easy if you enter your `client_id`, `client_secret` and `app_token` into the `.config` file. Otherwise, pass them in as arguments when creating a new instance. Keep in mind the 'app_token' is generated from your app's developer page and is not a user token.
 
-  var PADN = require('./PADN');
-  var client = new PADN('client_id', 'client_secret', 'app_token');
-
+```
+var PADN = require('./PADN');
+var client = new PADN('client_id', 'client_secret', 'app_token');
+```
 
 ## Authorize
 
+Creat a new client and authorize it.
+
+```
   var client = new PADN();
   client.authorize(function(err) {
     if (err)
       return console.error(err);
-    
+      
     var authorized = client.isAuthorized(); // true
   });
-
+```
 
 ## Fetching a stream
 
