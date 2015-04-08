@@ -26,22 +26,23 @@ Creat a new client and authorize it.
 ## Fetching a stream
 
 You need a `filter_id` to get a specific subset of your App Stream. Fetch the a filter and then a stream. Both `fetchFilter()` and `fetchStream()` search for a pre-existing filter with the same name before creating it. If an object already exist it is returned. 
+
+```
+var clauses = [client.createFilterClause('post', 'one_of', '/data/entities/mentions/*/id')];
+var JSONFilter = client.createJSONFilter('mentions', clauses, 'include_any');
+
+client.fetchFilter(JSONFilter, function(err, filter) {
+  if (err)
+    return console.error(err);
   
-  var clauses = [client.createFilterClause('post', 'one_of', '/data/entities/mentions/*/id')];
-  var JSONFilter = client.createJSONFilter('mentions', clauses, 'include_any');
-  
-  client.fetchFilter(JSONFilter, function(err, filter) {
+  var JSONStream = client.createJSONStream(['post','star','user_follow'], filter.id, JSONStreamKey);
+  client.createStream(JSONStream, function(err, stream) {
     if (err)
       return console.error(err);
     
-    var JSONStream = client.createJSONStream(['post','star','user_follow'], filter.id, JSONStreamKey);
-    client.createStream(JSONStream, function(err, stream) {
-      if (err)
-        return console.error(err);
-      
-      var streamEndpoint = stream.endpoint; // https://stream-channel.app.net/channel/...
-    });
+    var streamEndpoint = stream.endpoint; // https://stream-channel.app.net/channel/...
   });
-
+});
+```
 
 
