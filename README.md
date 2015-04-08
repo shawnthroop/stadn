@@ -16,13 +16,13 @@ var client = new PADN('client_id', 'client_secret', 'app_token');
 Create a new client and authorize it.
 
 ``` javascript
-  var client = new PADN();
-  client.authorize(function(err) {
-    if (err)
-      return console.error(err);
+var client = new PADN();
+client.authorize(function(err) {
+  if (err)
+    return console.error(err);
 
-    var authorized = client.isAuthorized(); // true
-  });
+  var authorized = client.isAuthorized(); // true
+});
 ```
 
 ## Fetching a stream
@@ -56,10 +56,7 @@ var client = // Authorized client
 var stream = // Stream object returned in the callback from fetchStream. Not a JSONStream.
 
 // the returned object is a json object conforming to examples: https://developers.app.net/reference/resources/app-stream/#sample-stream-objects
-client.monitorStream(stream, function(json) {
-  var meta = json.meta;
-  if (meta.type) {
-    // handle JSON object with type 'post'
-  }
+client.monitorStream(stream, function(meta, data) {
+    // handle chunk of stream data
 });
 ```

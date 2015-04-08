@@ -6,6 +6,8 @@ var request = require('request'),
     config = require('./config');
 
 
+var PADN = PADN || {};
+
 function Client(clientId, clientSecret, appToken) {
   this.clientId = clientId == null ? config.clientId : clientId;
   this.clientSecret = clientSecret == null ? config.clientSecret : clientSecret;
@@ -167,7 +169,6 @@ Client.prototype.fetchFilter = function(JSONFilter, callback) {
     if (fetchedFilter)
       return callback(null, fetchedFilter);
 
-
     console.log('Couldn\'t find filter with name: ' + JSONFilter.name + ', creating it');
     client.createFilter(JSONFilter, function(err, json) {
       if (err)
@@ -287,9 +288,9 @@ Client.prototype.monitorStream = function(stream, notificationBlock) {
         try { json = JSON.parse(chunk); } catch(error) { console.log(error); }
 
         if (json)
-          notificationBlock(json);
+          notificationBlock(json.meta, json.data);
       }
-      
+
       chunk = '';
     }
   });
@@ -308,5 +309,6 @@ Client.prototype.createJSONStream = function(object_types, filterId, key) {
   }
 }
 
+PADN.Client = Client;
 
-module.exports = Client;
+module.exports = PADN;
