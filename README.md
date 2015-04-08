@@ -1,4 +1,4 @@
-# PADN
+# STADN
 
 A node.js script that can fetch and monitor a filtered App.net App Stream
 
@@ -7,8 +7,8 @@ A node.js script that can fetch and monitor a filtered App.net App Stream
 Create a new configuration file following the example in `example-config.js` and enter you `client_id`, `client_secret` and `app_token`. Then when creating a client, specify the path of the config file. Keep in mind the `app_token` you provide must be generated from your app's developer page. It cannot be a user token.
 
 ``` javascript
-var PADN = require('./PADN');
-var client = PADN.Client.create('config');
+var STADN = require('./STADN');
+var client = STADN.Client.create('config');
 ```
 
 ## Authorize
@@ -16,7 +16,7 @@ var client = PADN.Client.create('config');
 Create a new client and authorize it.
 
 ``` javascript
-var client = PADN.Client.create('config');
+var client = STADN.Client.create('config');
 client.authorize(function(err) {
   if (err)
     return console.error(err);
@@ -58,7 +58,7 @@ var stream = // Stream object returned in the callback from fetchStream. Not a J
 client.monitorStream(stream, function(meta, data) {
     // handle chunk of stream data, for example:
     if (meta.type === 'post') {
-      var post = PADN.Post.createWithData(data);
+      var post = STADN.Post.createWithData(data);
       console.log(post);
     }
 });
