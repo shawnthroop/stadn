@@ -1,6 +1,6 @@
 # PADN
 
-A client side script for monitoring an App.net App Stream, written in node.
+A node.js script that can fetch and monitor a filtered App.net App Stream
 
 ## Initialize
 
