@@ -4,7 +4,7 @@ A client side script for monitoring an App.net App Stream, written in node.
 
 ## Initialize
 
-Create a new config file following the example in `example-config.js` and enter you `client_id`, `client_secret` and `app_token`. Then when creating a client specify the path of the config file. Keep in mind the `app_token` is generated from your app's developer page and is not a user token.
+Create a new configuration file following the example in `example-config.js` and enter you `client_id`, `client_secret` and `app_token`. Then when creating a client, specify the path of the config file. Keep in mind the `app_token` you provide must be generated from your app's developer page. It cannot be a user token.
 
 ``` javascript
 var PADN = require('./PADN');
@@ -27,7 +27,7 @@ client.authorize(function(err) {
 
 ## Fetching a stream
 
-You need a `filter_id` to get a specific subset of your App Stream. Fetch a filter and then a stream, both `fetchFilter()` and `fetchStream()` search for a pre-existing filter with the same name/key before creating it. If an filter or stream already exist it is returned.
+You need a `filter_id` to get a specific subset of your App Stream. Fetch a filter and then a stream, both `fetchFilter()` and `fetchStream()` search for a pre-existing filter with the same name/key before creating it. If a filter or stream already exist it is returned.
 
 ``` javascript
 var clauses = [client.createFilterClause('post', 'one_of', '/data/entities/mentions/*/id')];
