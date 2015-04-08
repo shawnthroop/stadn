@@ -3,15 +3,15 @@
 var request = require('request'),
     querystring = require('querystring'),
     https = require('https');
-    config = require('./config');
-
 
 var PADN = PADN || {};
 
-function Client(clientId, clientSecret, appToken) {
-  this.clientId = clientId == null ? config.clientId : clientId;
-  this.clientSecret = clientSecret == null ? config.clientSecret : clientSecret;
-  this.appToken = appToken != null ? appToken : config.appToken;
+function Client(configPath) {
+  config = require('.' + configPath);
+
+  this.clientId = config.clientId;
+  this.clientSecret = config.clientSecret;
+  this.appToken = config.appToken;
   this.token = null;
 
   // Host URLs for accessing App.net
@@ -115,7 +115,9 @@ Client.prototype.authenticate = function(callback) {
 Client.prototype.isAuthenticated = function() {
   var result = false
   if (this.token) {
-    result = true;
+    if (this.appToken) {
+      result = true;
+    }
   }
 
   return result;
@@ -283,9 +285,20 @@ Client.prototype.monitorStream = function(stream, notificationBlock) {
     chunk += data.toString('utf8');
 
     if (chunk.endsWith('\r\n')) {
-      if (chunk != '\r\n') {
+      if (chunk === '\r\n') {
+        // Keep alive
+
+      } else {
         var json = null;
-        try { json = JSON.parse(chunk); } catch(error) { console.log(error); }
+
+        // Attempt JSON.parse();
+        try {
+          json = JSON.parse(chunk);
+
+        } catch(error) {
+          console.log(error + '\nFAILED CHUNK: \n' + chunk);
+
+        }
 
         if (json)
           notificationBlock(json.meta, json.data);
@@ -309,6 +322,57 @@ Client.prototype.createJSONStream = function(object_types, filterId, key) {
   }
 }
 
-PADN.Client = Client;
+
+
+// User Objects
+
+function User(userId, username, fullName, userType, createdAt) {
+  this.userId = Number(userId);
+  this.username = username;
+  this.fullName = fullName;
+  this.userType = userType;
+  this.createdAt = Date(createdAt);
+}
+
+
+// Post Objects
+
+function Post(postId, user, text, entities, createdAt) {
+  this.postId = Number(postId);
+  this.user = user;
+  this.text = text;
+  this.entities = entities;
+  this.createdAt = Date(createdAt);
+}
+
+
+
+
+
+PADN.Client = {
+  create: function(configPath) {
+    return new Client(configPath);
+  }
+};
+
+PADN.User = {
+  create: function(userId, username, fullName, userType, createdAt) {
+    return new User(userId, username, fullName, userType, createdAt);
+  },
+  createWithData: function(data) {
+    return this.create(data.id, data.username, data.name, data.type, data.created_at);
+  }
+};
+
+PADN.Post = {
+  create: function(postId, user, text, entities, createdAt){
+    return new Post(postId, user, text, entities, createdAt);
+  },
+  createWithData: function(data) {
+    var user = PADN.User.createWithData(data.user);
+    return this.create(data.id, user, data.text, data.entities, data.created_at);
+  }
+}
+
 
 module.exports = PADN;

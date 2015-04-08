@@ -2,3 +2,7 @@
 config/config.js
 
 node_modules/*
+
+test.js
+
+push.js
