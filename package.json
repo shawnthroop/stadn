@@ -1,8 +1,8 @@
 {
-  "name": "STADN",
+  "name": "stadn",
   "version": "1.0.0",
   "description": "A node.js script that can fetch and monitor a filtered App.net App Stream",
-  "main": "STADN.js",
+  "main": "stadn.js",
   "dependencies": {
     "request": "^2.55.0"
   },
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shawnthroop/STADN.git"
+    "url": "https://github.com/shawnthroop/stadn.git"
   },
   "keywords": [
     "App.net",
@@ -22,7 +22,7 @@
   "author": "Shawn Throop <shawnthroop@gmail.com> (http://shawnthroop.com)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shawnthroop/STADN/issues"
+    "url": "https://github.com/shawnthroop/stadn/issues"
   },
-  "homepage": "https://github.com/shawnthroop/STADN"
+  "homepage": "https://github.com/shawnthroop/stadn"
 }

@@ -1,4 +1,4 @@
-# STADN
+# stadn
 
 A node.js script that can fetch and monitor a filtered App.net App Stream
 
@@ -7,8 +7,8 @@ A node.js script that can fetch and monitor a filtered App.net App Stream
 Create a new configuration file following the example in `example-config.js` and enter you `client_id`, `client_secret` and `app_token`. Then when creating a client, specify the path of the config file. Keep in mind the `app_token` you provide must be generated from your app's developer page. It cannot be a user token.
 
 ``` javascript
-var STADN = require('./STADN');
-var client = STADN.Client.create('config');
+var adn = require('./stadn');
+var client = adn.Client('config');
 ```
 
 ## Authorize
@@ -16,7 +16,7 @@ var client = STADN.Client.create('config');
 Create a new client and authorize it.
 
 ``` javascript
-var client = STADN.Client.create('config');
+var client = adn.Client('config');
 client.authorize(function(err) {
   if (err)
     return console.error(err);
@@ -49,16 +49,18 @@ client.fetchFilter(JSONFilter, function(err, filter) {
 
 ## Monitoring an endpoint
 
-Once you have a stream and an authorized client, you can monitor for notifications by passing in a block:
+Once you have a stream and an authorized client, you can monitor for notifications by passing in a block.
 
 ``` javascript
-var client = // Authorized client
+var model = adn.Model();
+
+var client = // Pre-authorized client object
 var stream = // Stream object returned in the callback from fetchStream. Not a JSONStream.
 
 client.monitorStream(stream, function(meta, data) {
     // handle chunk of stream data, for example:
     if (meta.type === 'post') {
-      var post = STADN.Post.createWithData(data);
+      var post = model.postWithData.(data);
       console.log(post);
     }
 });
