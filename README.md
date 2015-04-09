@@ -1,4 +1,4 @@
-# stadn
+# stadn.js
 
 A node.js script that can fetch and monitor a filtered App.net App Stream
 
