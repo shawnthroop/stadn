@@ -7,11 +7,15 @@ var request = require('request'),
 // var STADNClient = STADNClient || {};
 
 function Client(configPath) {
-  config = require('./' + configPath);
+  if (configPath) {
+    var config = require(configPath);
+    this.clientId = config.clientId;
+    this.clientSecret = config.clientSecret;
+    this.appToken = config.appToken;
+  } else {
+    console.log('Warning: path to config file not provided. Use initialize() to supply your clientId, clientSecret, and appToken.');
+  }
 
-  this.clientId = config.clientId;
-  this.clientSecret = config.clientSecret;
-  this.appToken = config.appToken;
   this.token = null;
 
   // Host URLs for accessing App.net
@@ -70,11 +74,19 @@ authedAPIRequest = function(method, endpoint, token, postBody, callback) {
 }
 
 
+Client.prototype.initialize = function(clientId, clientSecret, appToken) {
+  this.clientId = clientId;
+  this.clientSecret = clientSecret;
+  this.appToken = appToken;
+}
 
 
 Client.prototype.authenticate = function(callback) {
   if (this.token)
     return callback(null);
+
+  if (!this.clientId || !this.clientSecret)
+    return callback(new Error('Must supply both a clientId and clientSecret before an access token can be fetched'));
 
   var endpoint = this.authHost + '/oauth/access_token';
   var headers = { 'Content-type': 'application/x-www-form-urlencoded' };
@@ -281,15 +293,12 @@ Client.prototype.monitorStream = function(stream, notificationBlock) {
         // Keep alive
 
       } else {
-        var json = null;
-
         // Attempt JSON.parse();
+        var json = null;
         try {
           json = JSON.parse(chunk);
-
         } catch(error) {
           console.log(error + '\nFAILED CHUNK: \n' + chunk);
-
         }
 
         if (json)
@@ -313,58 +322,6 @@ Client.prototype.createJSONStream = function(object_types, filterId, key) {
     key: key
   }
 }
-
-
-
-// User Objects
-//
-// function User(userId, username, fullName, userType, createdAt) {
-//   this.userId = Number(userId);
-//   this.username = username;
-//   this.fullName = fullName;
-//   this.userType = userType;
-//   this.createdAt = Date(createdAt);
-// }
-//
-//
-// // Post Objects
-//
-// function Post(postId, user, text, entities, createdAt) {
-//   this.postId = Number(postId);
-//   this.user = user;
-//   this.text = text;
-//   this.entities = entities;
-//   this.createdAt = Date(createdAt);
-// }
-
-
-
-
-
-// PADN.Client = {
-//   create: function(configPath) {
-//     return new Client(configPath);
-//   }
-// };
-
-// PADN.User = {
-//   create: function(userId, username, fullName, userType, createdAt) {
-//     return new User(userId, username, fullName, userType, createdAt);
-//   },
-//   createWithData: function(data) {
-//     return this.create(data.id, data.username, data.name, data.type, data.created_at);
-//   }
-// };
-//
-// PADN.Post = {
-//   create: function(postId, user, text, entities, createdAt){
-//     return new Post(postId, user, text, entities, createdAt);
-//   },
-//   createWithData: function(data) {
-//     var user = PADN.User.createWithData(data.user);
-//     return this.create(data.id, user, data.text, data.entities, data.created_at);
-//   }
-// }
 
 
 module.exports = Client;

@@ -4,19 +4,33 @@ A node.js script that can fetch and monitor a filtered App.net App Stream
 
 ## Initialize
 
-Create a new configuration file following the example in `example-config.js` and enter you `client_id`, `client_secret` and `app_token`. Then when creating a client, specify the path of the config file. Keep in mind the `app_token` you provide must be generated from your app's developer page. It cannot be a user token.
+Two objects can be created from the base `stadn` object: a client object and an object for constructing model objects. For convenience, supply your `client_id`, `client_secret` and `app_token` in a configuration file. An example file is provided. Then when creating your client, pass in the path to this configuration file.
 
 ``` javascript
-var adn = require('./stadn');
-var client = adn.Client('config');
+var adn = require('stadn');
+var client = adn.Client('./config');
 ```
+
+Or if you prefer not to use a configuration file, use `initialize()`.
+
+``` javascript
+var client = adn.Client();
+client.initialize('CLIENT_ID', 'CLIENT_SECRET', 'APP_TOKEN');
+```
+
+Creating a model object constructor is easy.
+
+``` javascript
+var model = adn.Model();
+```
+
 
 ## Authorize
 
-Create a new client and authorize it.
+Create a new client and authorize it. You must supply a client ID and secret before calling 'authorize()' or an error will be returned in the callback.
 
 ``` javascript
-var client = adn.Client('config');
+var client = adn.Client('./config');
 client.authorize(function(err) {
   if (err)
     return console.error(err);
@@ -24,6 +38,7 @@ client.authorize(function(err) {
   var authorized = client.isAuthorized(); // true
 });
 ```
+
 
 ## Fetching a stream
 
@@ -46,6 +61,7 @@ client.fetchFilter(JSONFilter, function(err, filter) {
   });
 });
 ```
+
 
 ## Monitoring an endpoint
 
