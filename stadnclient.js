@@ -12,8 +12,8 @@ function Client(configPath) {
     this.clientId = config.clientId;
     this.clientSecret = config.clientSecret;
     this.appToken = config.appToken;
-  } else {
-    console.log('Warning: path to config file not provided. Use initialize() to supply your clientId, clientSecret, and appToken.');
+  // } else {
+  //   console.log('Warning: path to config file not provided. Use initialize() to supply your clientId, clientSecret, and appToken.');
   }
 
   this.token = null;
@@ -271,12 +271,17 @@ String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
+String.prototype.containsSubstring = function(substring) {
+  return this.indexOf(substring) != -1;
+}
+
 
 Client.prototype.monitorStream = function(stream, notificationBlock) {
   var options = {
     url: stream.endpoint,
     headers: {
       Authorization: 'Bearer ' + this.token,
+      'X-ADN-Pretty-JSON': 1
     }
   }
 
@@ -294,15 +299,23 @@ Client.prototype.monitorStream = function(stream, notificationBlock) {
 
       } else {
         // Attempt JSON.parse();
-        var json = null;
-        try {
-          json = JSON.parse(chunk);
-        } catch(error) {
-          console.log(error + '\nFAILED CHUNK: \n' + chunk);
-        }
+        var parts = chunk.split('}\n{').join('}}__{{').split('}__{');
 
-        if (json)
-          notificationBlock(json.meta, json.data);
+        for (var index in parts) {
+          var part = parts[index];
+          var json = null;
+
+          try {
+            json = JSON.parse(part);
+
+          } catch(error) {
+            console.log(error + '\nFAILED CHUNK: \n' + part);
+          }
+
+          if (json && notificationBlock) {
+            notificationBlock(json.meta, json.data);
+          }
+        }
       }
 
       chunk = '';
