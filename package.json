@@ -1,6 +1,6 @@
 {
   "name": "stadn",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A node.js script that can fetch and monitor a filtered App.net App Stream",
   "main": "stadn.js",
   "dependencies": {

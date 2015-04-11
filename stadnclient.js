@@ -298,7 +298,9 @@ Client.prototype.monitorStream = function(stream, notificationCallback) {
       } else {
         // Sometimes the chunk includes more than one response envelope.
         // Split them out and process each envelop seprately
-        var parts = chunk.split('}\n{').join('}}__{{').split('}__{');
+        var reg = new RegExp('(}{|}\n{)', 'g');
+        var parts = chunk.replace(reg, '}}__{{}').split('}__{');
+        // var parts = chunk.split('}\n{').join('}}__{{').split('}__{'); // Old version
 
         for (var index in parts) {
           var part = parts[index];
