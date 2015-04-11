@@ -1,10 +1,8 @@
 // An client object that gives access to App.net's API
 
 var request = require('request'),
-    querystring = require('querystring'),
-    https = require('https');
+    querystring = require('querystring');
 
-// var STADNClient = STADNClient || {};
 
 function Client(configPath) {
   if (configPath) {
@@ -276,7 +274,8 @@ String.prototype.containsSubstring = function(substring) {
 }
 
 
-Client.prototype.monitorStream = function(stream, notificationBlock) {
+Client.prototype.monitorStream = function(stream, notificationCallback) {
+  var chunk = '';
   var options = {
     url: stream.endpoint,
     headers: {
@@ -285,7 +284,6 @@ Client.prototype.monitorStream = function(stream, notificationBlock) {
     }
   }
 
-  var chunk = '';
   var req = request(options, function(err, response, body) {
     response.setEncoding('utf8');
   });
@@ -298,7 +296,8 @@ Client.prototype.monitorStream = function(stream, notificationBlock) {
         // Keep alive
 
       } else {
-        // Attempt JSON.parse();
+        // Sometimes the chunk includes more than one response envelope.
+        // Split them out and process each envelop seprately
         var parts = chunk.split('}\n{').join('}}__{{').split('}__{');
 
         for (var index in parts) {
@@ -306,14 +305,15 @@ Client.prototype.monitorStream = function(stream, notificationBlock) {
           var json = null;
 
           try {
+            // Attempt parsing of response
             json = JSON.parse(part);
 
           } catch(error) {
             console.log(error + '\nFAILED CHUNK: \n' + part);
           }
 
-          if (json && notificationBlock) {
-            notificationBlock(json.meta, json.data);
+          if (json && notificationCallback) {
+            notificationCallback(json.meta, json.data);
           }
         }
       }
