@@ -275,7 +275,7 @@ String.prototype.containsSubstring = function(substring) {
 
 
 Client.prototype.monitorStream = function(stream, notificationCallback) {
-  var chunk = '';
+  var chunk = "";
   var options = {
     url: stream.endpoint,
     headers: {
@@ -292,35 +292,32 @@ Client.prototype.monitorStream = function(stream, notificationCallback) {
     chunk += data.toString('utf8');
 
     if (chunk.endsWith('\r\n')) {
-      if (chunk === '\r\n') {
-        // Keep alive
-
-      } else {
+      if (chunk !== '\r\n') {
         // Sometimes the chunk includes more than one response envelope.
         // Split them out and process each envelop seprately
-        var reg = new RegExp('(}{|}\n{)', 'g');
-        var parts = chunk.replace(reg, '}}__{{}').split('}__{');
-        // var parts = chunk.split('}\n{').join('}}__{{').split('}__{'); // Old version
+        var reg = new RegExp('({.*})', 'g');
+        var parts = chunk.split(reg);
 
         for (var index in parts) {
           var part = parts[index];
-          var json = null;
 
-          try {
-            // Attempt parsing of response
-            json = JSON.parse(part);
+          if (part.charAt(0) === '{') {
+            var json = null;
 
-          } catch(error) {
-            console.log(error + '\nFAILED CHUNK: \n' + part);
-          }
+            try {
+              json = JSON.parse(part);
+            } catch(jsonError) {
+              console.error(jsonError + '\nFAILED CHUNK:\n' + part);
+            }
 
-          if (json && notificationCallback) {
-            notificationCallback(json.meta, json.data);
+            if (json && notificationCallback) {
+              notificationCallback(json.meta, json.data);
+            }
           }
         }
       }
 
-      chunk = '';
+      chunk = "";
     }
   });
 }
